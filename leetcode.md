@@ -1,5 +1,5 @@
 # Review List
-## [975](https://leetcode.com/problems/odd-even-jump/)
+## [975. Odd Even Jump](https://leetcode.com/problems/odd-even-jump/)
 ### Problem
 The core problem is: given an array of integers, for each number, find the smallest number on the right which is larger than it. Use the nearest if there is a tie.
 ### Solution
@@ -31,7 +31,7 @@ If equal, we check char by char to see if the substring is B or not.
 #### [calculate inverse element](https://www.cnblogs.com/rainydays/p/4706219.html)
 #### [Rabin-Karp](https://www.cnblogs.com/rainydays/archive/2011/06/23/2088081.html)
 
-## [398](https://leetcode.com/problems/random-pick-index/)
+## [398 Random Pick Index](https://leetcode.com/problems/random-pick-index/)
 ### Problem
 Given an array, go through it for once to find a target value and output the index.
 If there are ties, pick each one with equal probability.
@@ -63,3 +63,30 @@ Proved.
 
 A variation of the problem would be, We can only pick the elements satisfying certain condition, for example, only picking prime numbers in an array of integers with equal probability.
 We just change the definition of i from the number of elements we have gone through to the number of elements we have gone through and satisfiying the condition.
+
+## [843. Guess the Word](https://leetcode.com/problems/guess-the-word/)
+### Problem
+Given 100 words of length 6, one of which is the target.
+You pick one at a time to query how many matches in letters between the one you pick and the target.
+Matches is calculated as: 
+
+"abbccd" and 
+
+"aabbcc" has 3 matches at index 0, 2, 4.
+You need to pick the target within 10 queries.
+### Solution
+A simple solution would be after each query we filter the list of words.
+For example, the query says the picked one and the target has x matches.
+We check the matches of the picked one with all the words.
+Only keep the ones having x matches with the picked word.
+Next time, we just randomly pick one from the filtered list.
+
+This solution won't pass.
+A better solution would be not randomly pick.
+We want the size of the filtered list to be small after a query.
+Given a word, there are only 7 possible outcomes of the query (0~6 matches).
+Each of the outcome would result in a different size of the filtered list.
+We use the maximum among the 7 as the indicator of whether we should pick it.
+We just compute the indicator of all the words in the list before we pick one with the smallest indicator.
+
+The reason we use the maximum as the indicator is because we want to garantee the worst case since we only have 10 chances.
