@@ -90,3 +90,25 @@ We use the maximum among the 7 as the indicator of whether we should pick it.
 We just compute the indicator of all the words in the list before we pick one with the smallest indicator.
 
 The reason we use the maximum as the indicator is because we want to garantee the worst case since we only have 10 chances.
+
+## [363. Max Sum of Rectangle No Larger Than K](https://leetcode.com/problems/max-sum-of-rectangle-no-larger-than-k/)
+
+### Problem
+Given a 2-d array, with integer values (positive and negative).
+Given an integer k.
+Find the maximum sub-matrix sum <= k.
+
+### Solution
+We can use dynamic programming to calculate the sums of the sub-matrices.
+Then by enumerating all the sub-matrices, we can get the answer.
+Complexity O(n^2m^2).
+An improve would be only enumerate the top, bottom and right border of the sub-matrix.
+Since we want 
+For the left border we just select the left that maximize sum[right] - sum[left] subject to <= k,
+where sum is the sum of the sub-matrix with left=0 to right=index and the current top and bottom border.
+To maximize it, we can use binary search tree.
+It is equivalent to maximizing sum[left] subject to >= sum[right] - k.
+We insert the sum values into the tree, every time we query it the lower_bound of sum[right] - k, as we iterate all the right.
+The complexity is O(n^2mlogm).
+
+Note: Python doesn't have a built-in binary search tree. We need to write our own.
