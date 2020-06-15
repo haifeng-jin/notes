@@ -1,5 +1,10 @@
 # Unit Testing
 #tech/software engineering#
+Unit tests should be simple, readable, and behavior-driven.
+We want to achieve the following effect.
+Whenever a unit tests fails, the developer can directly tell what expected bahavior is not working from the test name.
+The developer can tell the test itself is correctly implemented at a glance.
+
 ## Mockito
 Car car = new Car();
 car.manager = mock(Manager.class);
