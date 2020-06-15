@@ -1,5 +1,5 @@
 # Unit Testing
-#tech/software engineering#
+
 Unit tests should be simple, readable, and behavior-driven.
 We want to achieve the following effect.
 Whenever a unit tests fails, the developer can directly tell what expected bahavior is not working from the test name.
