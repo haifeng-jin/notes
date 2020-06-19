@@ -1,5 +1,4 @@
 # Java Log Best Practices
-#tech/software engineering#
 What do I mean? There are lots of Java logging frameworks and libraries out there, and most developers use one or more of them every day. Two of the most common examples for Java developers are log4j and logback. They are simple and easy to use and work great for developers. Basic java log files are just not enough, though, but we have some Java best practices and tips to help you make the most of them!
 
 Have you ever had to work with your log files once your application left development? If so, you quickly run into a few pain points.
@@ -30,12 +29,12 @@ In this post, we’ll explore these best practices, and share what we’ve done 
 
 I’ve worked in a lot of shops where log messages looked like this:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8349-catch.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8349-catch.png)
 I’ll give the developer credit; at least they are using a try/catch and handling the exception. The exception will likely have a stack trace so I know roughly where it came from, but **no other context** is logged.
 
 Sometimes, they even do some more proactive logging, like this:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8350-logger-debug.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8350-logger-debug.png)
 But generally, statements like that don’t go a long way towards letting you know what’s really happening in your app. If you’re tasked with troubleshooting an error in production, and/or it is happening for just one (or a subset) of the application users, this doesn’t leave you with a lot to go on, especially when considering your log statement could be a needle in a haystack in an app with lots of use.
 
 As I mentioned earlier, logging is often one of the few lifelines you have in production environments where you can’t physically attach and debug. You want to log as much relevant, contextual data as you can. Here are our guiding principles on doing that.
@@ -44,7 +43,7 @@ As I mentioned earlier, logging is often one of the few lifelines you have in pr
 
 Let’s pretend that you have a process that you want to add logging around so that you can look at what happened. You _could_ just put a try / catch around the entire thing and handle the exceptions (which you should) but it doesn’t tell you much about **what was passed _into_ the request**. Take a look at the following, oversimplified example.
 
-```
+```java
 public class Foo {
 
     private int id;
@@ -69,7 +68,7 @@ public class Foo {
 
 Take the following [factory method](/static-factory-methods/), which creates a Foo. Note how I’ve opened the door for error – the method takes a Double as an input parameter. I call doubleValue() but don’t check for null. This could cause an exception.
 
-```
+```java
 public class FooFactory {
 
     public static Foo createFoo(int id, Double value) {
@@ -81,7 +80,7 @@ public class FooFactory {
 
 This is a simple scenario, but it serves the purpose well. Assuming this is a really critical aspect of my Java app (can’t have any failed Foos!) let’s add some basic logging so we know what’s going on.
 
-```
+```java
 public class FooFactory {
 
     private static Logger LOGGER = LoggerFactory.getLogger(FooFactory.class);
@@ -109,7 +108,7 @@ public class FooFactory {
 
 Now, let’s create two foos; one that is valid and one that is not:
 
-```
+```java
 FooFactory.createFoo(1, Double.valueOf(33.0));
     FooFactory.createFoo(2, null);
 ```
@@ -128,7 +127,7 @@ java.lang.NullPointerException
 
 Now we have some logging – we know when Foo objects are created, and when they fail to create in createFoo(). But we are missing some context that would help. The default toString() implementation doesn’t build any data about the members of the object. We have some options here, but let’s have the [IDE](/top-integrated-developer-environments-ides/) generate an implementation for us.
 
-```
+```java
 @Override
     public String toString() {
    	 return "Foo [id=" + id + ", value=" + value + "]";
@@ -161,7 +160,7 @@ java.lang.NullPointerException
 
 When you log objects as JSON and use Stackify’s Retrace tool, you can get some nice details like this:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8351-json-view-e1488513845866.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8351-json-view-e1488513845866.png)
 Retrace Logging Dashboard JSON Viewer
 
 ## *Logging More Details with Diagnostic Contexts*
@@ -170,7 +169,7 @@ And this brings us to one last point on logging more details: diagnostic context
 
 The easiest way to add context items to your logging is usually a servlet filter. For this example, let’s create a servlet filter that generates a transaction id and attaches it to the MDC.
 
-```
+```java
 public class LogContextFilter implements Filter {
 
     public void init(FilterConfig config) {
@@ -198,7 +197,7 @@ public class LogContextFilter implements Filter {
 
 Now, we can see some log statements like this:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8352-e1488513883492.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8352-e1488513883492.png)
 More context. We can now trace all log statements from a single request.
 
 This brings us to the next topic, which is **Work Harder, Not Smarter.** But before that, I’m going to address a question I’m sure to hear a lot of in the comments: “But if I log _everything_ won’t that create overhead, unnecessary chatter, and huge log files?” My answer comes in a couple of parts: first, use the logging verbosity levels. you can _LOGGER.debug()_ **everything you think you’ll need**, and then set your config for production appropriately, i.e. Warning and above only. When you do need the debug info, it’s only changing a config file and not redeploying code. Second, if you’re logging in an _async, non-blocking way_, then overhead should be low. Last, if you’re worried about space and log file rotation, there are smarter ways to do it, and we’ll talk about that in the next section.
@@ -246,7 +245,7 @@ log4j.appender.STACKIFY.environment=test
 
 As you can see, if you’re already using a different appender, you can keep it in place and put them side-by-side. Now that you’ve got your logs streaming to Stackify we can take a look at the logging dashboard. (By the way, if our monitoring agent is installed, you can also send [Syslog](/syslog-101/) entries to Stackify as well!)
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8353-e1488513909777.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8353-e1488513909777.png)
 This dashboard shows a consolidated stream of log data, coming from all your servers and apps, presented in a timeline. From here, you can quickly
 
 * View logs based on a range of time
@@ -257,12 +256,12 @@ It’s clear that a few minutes ago, my web app started having a lot more consis
 
 By zooming in on the chart to this time period, I can quickly filter my log detail down to that time range and take a look at the logs for that period of time.
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8354-e1488513935832.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8354-e1488513935832.png)
 ## *Searching Your Logs*
 
 Do you see that blue text below that looks like a JSON object?
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8355-e1488513956939.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8355-e1488513956939.png)
 Well, it _is_ a JSON object. That’s the result of logging objects, and adding context properties earlier. It looks a lot nicer than plain text in a flat file, doesn’t it? Well, it gets even more awesome. See the search box at the top of the page? I can put in any search string that I can think of, and it will **query all my logs as if it were a flat file**. As we discussed earlier, however, this isn’t _great_ because you could end up with a lot more matches than you want. Suppose that I want to search for all objects with an id of 5. Fortunately, our log aggregator is smart enough to help in this situation. That’s because when we find serialized objects in logs, we index each and every field we find. That makes it easy to perform a search like this:
 
 ```
@@ -271,23 +270,23 @@ json.idNumber:5.0
 
 That search yields the following results:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8356-e1488514288367.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8356-e1488514288367.png)
 Want to know what else you can search by? Just click on the document icon when you hover over a log record, and you’ll see all the fields that Stackify indexes. Being able to get more value out of your logs and search by all the fields is called [structured logging](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/).
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8357-e1488514247566.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8357-e1488514247566.png)
 ## Exploring Java  *Exception Details*
 
 You may have also noticed this little red bug icon (
-![](Java%20Log%20Best%20Practices/bug.png)
+![](/img/tech/software_engineering/java_log_best_practices/bug.png)
 ) next to exception messages. That’s because we treat exceptions differently by automatically showing more context. Click on it and we present a deeper view of that exception.
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8359-e1488514228520.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8359-e1488514228520.png)
 Our libraries not only grab the full stack trace, but all of the web request details, including headers, query strings, and server variables, when available. In this modal, there is a “Logs” tab which gives you a pre-filtered view of the logging from the app that threw the error, on the server where it occurred, for a narrow time window before and after the exception, to give more context around the exception. Curious about how common or frequent this error occurs, or want to see details on other occurrences? Click the “View All Occurrences” button and voila!
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8360-e1488514203357.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8360-e1488514203357.png)
 I can quickly see this error has occurred 60 times over the last hour. Errors and logs are closely related, and in an app where a tremendous amount of logging can occur, exceptions could sometimes get a bit lost in the noise. That’s why we’ve built an [Errors Dashboard](https://stackify.com/error-monitoring/) as well, to give you this same consolidated view but limited to exceptions.
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8361-e1488514180766.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8361-e1488514180766.png)
 Here I can see a couple of great pieces of data:
 
 * I’ve had an uptick in my rate of exceptions over the past few minutes.
@@ -310,34 +309,34 @@ Stackify can do all of that. Let’s take a look at each.
 
 When we looked at the error dashboard, I noted that my ‘test’ environment is getting a high number of errors per hour. From the Error dashboard, click on “Error Rates” and then select which app/environment you wish to configure alerts for:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8362-e1488514150613.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8362-e1488514150613.png)
 I can configure monitors for “Errors/Minute” and “Total Errors Last 60 minutes” and then choose the “Notifications” tab to specify who should be alerted, and how. Subsequently, if using Stackify Monitoring, I can configure all of my other alerting here as well: App running state, memory usage, performance counters, custom metrics, ping checks, and more.
 
 ### *Resolved Errors & New Errors*
 
 Earlier on, I introduced a new error by not checking for null values when creating Foo objects. I’ve since fixed that and confirmed it by looking at the details for that particular error. As you can see, the last time it happened was 12 minutes ago:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8363-e1488514130602.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8363-e1488514130602.png)
 It was a silly mistake, but one that is easy to make. I’m going to mark this one as “resolved” which lets me do something really cool: get an alert if it comes back. The Notifications menu will let me check my configuration, and by default, I’m set to receive both new and regressed error notifications for all my apps and environments.
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8364-e1488514110935.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8364-e1488514110935.png)
 Now, if the same error occurs again in the future, I’m going to get an email about the regression and it shows up on the dashboard as such. This is a great little bit of automation to help out when you “think” you’ve solved the issue and want to make sure.
 
 ### *Log Monitors*
 
 Some things aren’t very straightforward to monitor. Perhaps you have a critical process that runs asynchronously and the only record of its success (or failure) is logging statements. Earlier in this post, I showed the ability to run deep queries against your [structured log data](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/), and any of those queries can be saved and monitored. I’ve got a very simple scenario here: my query is executed every minute, and we can monitor how many matching records we have.
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8365-e1488514090350.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8365-e1488514090350.png)
 It’s just a great simple way to check system health if a log file is your only indication.
 
 ## *Java Logging Best Practices*
 
 All of this error and log data can be invaluable, especially when you take a step back and look at a slightly larger picture. Below is the Application Dashboard for a Java web app that contains all of the monitoring:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8366-e1488514025858.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8366-e1488514025858.png)
 As you can see, you get some great contextual data at a glance that errors and logs contribute to: Satisfaction and HTTP Error Rate. You can see that user satisfaction is high and the HTTP error rate is low. You can quickly start drilling down to see which pages might not be performing well, and what errors are occurring:
 
-![](Java%20Log%20Best%20Practices/java-logging-best-practices-8367-e1488514002335.png)
+![](/img/tech/software_engineering/java_log_best_practices/java-logging-best-practices-8367-e1488514002335.png)
 There was a lot to cover in this post, and I feel like I barely scratched the surface. If you dig a little deeper or even get your hands on it, you can! I hope that these Java logging best practices will help you write better logs and save time troubleshooting.
 
 All of our Java logging appenders are available on [GitHub](https://github.com/stackify) and you can  [sign up for a free trial](https://stackify.com/sign-up/) to get started with Stackify today!

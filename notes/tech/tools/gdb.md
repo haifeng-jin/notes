@@ -49,7 +49,6 @@ Stepping lets you trace the path of your program, and zero in on the code that i
 	* Run the next instruction, not line. If the current instructions is setting a variable, it is the same as `next`. If it’s a function, it will jump into the function, execute the first statement, then pause. Step is good for diving into the details of your code.
 
 * `finish`
-
 	* Finish executing the current function, then pause (also called step out). Useful if you accidentally stepped into a function.
 
 ## Breakpoints and Watchpoints
@@ -187,18 +186,10 @@ int main(int argc, char** argv){
 
 * Spend the time to learn GDB (or another debugging tool)! I know, it’s like telling people to eat their vegetables, but it really is good for you – you’ll thank me later.
 
- Like
-
-8
  
 
  [Tweet](https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fbetterexplained.com%2Farticles%2Fdebugging-with-gdb%2F&amp;text=Debugging%20with%20GDB%20&amp;tw_p=tweetbutton&amp;url=http%3A%2F%2Fbetterexplained.com%2Farticles%2Fdebugging-with-gdb%2F)
   [2](http://twitter.com/search?q=http%3A%2F%2Fbetterexplained.com%2Farticles%2Fdebugging-with-gdb%2F)
-
-![](Debugging%20with%20GDB%20%7C%20BetterExplained/image_1.gif)
-
-![](Debugging%20with%20GDB%20%7C%20BetterExplained/image_1%202.gif)
-This page has been shared 2 times. View these Tweets.
 
    [5](http://betterexplained.com/articles/debugging-with-gdb/#)
 

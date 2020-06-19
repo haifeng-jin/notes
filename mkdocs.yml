@@ -28,5 +28,12 @@ extra_javascript:
 nav:
   - Home: index.md
   - Technology:
+    - Snippets:
+      - Linux C Sockets: tech/snippets/socket_c.md
+      - Linux C Thread: tech/snippets/thread_c.md
+      - Windows C++ Sockets: tech/snippets/socket_cpp_win.md
+    - Software Engineering:
+      - Java Logging Best Practices: tech/software_engineering/java_log_best_practices.md
     - Tools:
       - VIM: tech/tools/vim.md
+      - GDB: tech/tools/gdb.md
