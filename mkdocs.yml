@@ -1,0 +1,32 @@
+site_name: Haifeng's Notes
+theme:
+  name: 'material'
+  palette:
+    scheme: slate
+    primary: black
+
+docs_dir: notes
+repo_url: https://github.com/haifeng-jin/notes 
+site_url: http://autokeras.com
+edit_uri: ""
+site_description: "Haifeng Jin's Notes"
+markdown_extensions:
+  - codehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_div_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - admonition
+
+extra_javascript:
+  - https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js
+
+nav:
+  - Home: index.md
+  - Technology:
+    - Tools:
+      - VIM: tech/tools/vim.md
