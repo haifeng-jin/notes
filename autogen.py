@@ -7,6 +7,7 @@ f.close()
 lines = ['nav:']
 ignore = [
     'notes/img',
+    'notes/javascript',
 ]
 
 
