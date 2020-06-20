@@ -26,32 +26,33 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Technology:
+  - Tech:
     - Snippets:
-      - GPU: tech/snippets/gpu.md
-      - Latex: tech/snippets/latex.md
+      - LaTex: tech/snippets/latex.md
+      - Linux C Socket: tech/snippets/socket_c.md
+      - ubuntu: tech/snippets/ubuntu.md
+      - windows socket C++: tech/snippets/socket_cpp_win.md
       - Linux Commands: tech/snippets/linux_commands.md
-      - Linux C Sockets: tech/snippets/socket_c.md
       - Linux C Thread: tech/snippets/thread_c.md
-      - Ubuntu: tech/snippets/ubuntu.md
-      - Windows C++ Sockets: tech/snippets/socket_cpp_win.md
-    - Software Engineering:
-      - Agile: tech/software_engineering/agile.md
-      - Design Pattern: tech/software_engineering/design_pattern.md
-      - Design Review: tech/software_engineering/design_review.md
-      - Git: tech/software_engineering/git.md
-      - Guide for Technical Development: tech/software_engineering/guide_for_technical_development.md
-      - Java Logging Best Practices: tech/software_engineering/java_log_best_practices.md
-      - Python: tech/software_engineering/python.md
-      - Refactor: tech/software_engineering/refactor.md
-      - Unit Testing: tech/software_engineering/unit_testing.md
+      - GPU: tech/snippets/gpu.md
     - Tools:
-      - Docker: tech/tools/docker.md
-      - GCP: tech/tools/gcp.md
-      - GDB: tech/tools/gdb.md
-      - Jekyll: tech/tools/jekyll.md
-      - Pycharm: tech/tools/pycharm.md
-      - Screen: tech/tools/screen.md
-      - SVN: tech/tools/svn.md
       - TMUX: tech/tools/tmux.md
-      - VIM: tech/tools/vim.md
+      - Jekyll: tech/tools/jekyll.md
+      - Screen: tech/tools/screen.md
+      - VIM Shortcuts: tech/tools/vim.md
+      - Debugging with GDB | BetterExplained: tech/tools/gdb.md
+      - Subversion: tech/tools/svn.md
+      - Pycharm: tech/tools/pycharm.md
+      - Docker: tech/tools/docker.md
+      - Google Cloud Platform: tech/tools/gcp.md
+    - Software Engineering:
+      - Guide for Technical Development: tech/software_engineering/guide_for_technical_development.md
+      - Java Log Best Practices: tech/software_engineering/java_log_best_practices.md
+      - Design Review: tech/software_engineering/design_review.md
+      - Unit Testing: tech/software_engineering/unit_testing.md
+      - Refactor: tech/software_engineering/refactor.md
+      - Agile: tech/software_engineering/agile.md
+      - Python: tech/software_engineering/python.md
+      - Design Patterns: tech/software_engineering/design_pattern.md
+      - Git: tech/software_engineering/git.md
+  - Review List: leetcode.md
