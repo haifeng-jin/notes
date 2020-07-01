@@ -34,7 +34,7 @@ and now it will show up in your docker images list:
 
 The Docker.
 
-Use ENV to set environment variable.
+Use `ENV` to set environment variable.
 ```
 docker build -t registry.datadrivendiscovery.org/ta2/texas-anm-university_tamu_1.0.0:latest .
 docker login registry.datadrivendiscovery.org
