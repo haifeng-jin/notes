@@ -50,6 +50,12 @@ Remove docker images.
 docker rmi IMAGE_ID
 ```
 
+Remove all docker images.
+
+```
+docker rmi $(docker images -a -q)
+```
+
 Remove all docker images with pattern
 
 ```
