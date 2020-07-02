@@ -4,14 +4,16 @@ f = open('template.yml', 'r')
 content = f.read()
 f.close()
 
-lines = ['nav:']
+lines = ['nav:', '  - Home: index.md']
 ignore = [
+    'notes/index.md',
     'notes/img',
     'notes/javascript',
 ]
 
 
 def generate_line(path, depth):
+    print(path)
     f = open(path, 'r')
     name = f.readline().rstrip()[2:]
     f.close()
@@ -29,7 +31,7 @@ def add_dir(path, depth):
         if os.path.isdir(tmp_path):
             lines.append('  ' * (depth + 1) + '- ' + to_name(name) + ':')
             add_dir(tmp_path, depth + 1)
-        else:
+        elif tmp_path.endswith('md'):
             lines.append(generate_line(tmp_path, depth))
 
 add_dir('notes', 0)
