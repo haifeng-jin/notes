@@ -2,6 +2,7 @@
 
 ## Common Mistakes
 * When use '', "", (), [], and {}, type the pair before insert the contents.
+* () and [] can be easily misused with each other.
 ## Data Structures
 ### Queue & Stack
 ```python
