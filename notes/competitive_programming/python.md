@@ -3,6 +3,7 @@
 ## Common Mistakes
 * When use '', "", (), [], and {}, type the pair before insert the contents.
 * () and [] can be easily misused with each other.
+* `for index, elem in enumerate(...):`. index before elem.
 ## Data Structures
 ### Queue & Stack
 ```python
