@@ -4,6 +4,7 @@
 * When use '', "", (), [], and {}, type the pair before insert the contents.
 * () and [] can be easily misused with each other.
 * `for index, elem in enumerate(...):`. index before elem.
+* Use `//` to divide integers and get integer part of the result.
 ## Data Structures
 ### Queue & Stack
 ```python
