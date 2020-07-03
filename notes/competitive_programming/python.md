@@ -25,6 +25,10 @@ print(a['ab'])  # 5
 a.pop('ab')
 print('ab' in a)  # False
 
+a = collections.defaultdict(lambda : 0)
+a = collections.defaultdict(list)
+
+# Set is not subscriptable.
 a = set()
 a.add('ab')
 print('ab' in a)  # True
