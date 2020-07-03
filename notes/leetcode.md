@@ -16,7 +16,7 @@ Find the nearest one on the right, which is larger than the current one.
 The farther ones in the stack should be larger, the nearer ones should be smaller.
 So every element in the stack should either be large or be near. At least have one merit.
 
-## [686](https://leetcode.com/problems/repeated-string-match/)
+## [686. Repeated String Match](https://leetcode.com/problems/repeated-string-match/)
 ### Problem
 Given two strings, A and B.
 How many times we need to repeat A, so that B is a substring of A.
@@ -28,10 +28,10 @@ If not equal, then the substring is not B.
 If equal, we check char by char to see if the substring is B or not.
 
 ### Algorithms
-#### [calculate inverse element](https://www.cnblogs.com/rainydays/p/4706219.html)
-#### [Rabin-Karp](https://www.cnblogs.com/rainydays/archive/2011/06/23/2088081.html)
+#### [calculate inverse element](https://notes.haifengjin.com/competitive_programming/number_theory/#_3)
+#### [Rabin-Karp](https://notes.haifengjin.com/competitive_programming/string/#karp-rabin)
 
-## [398 Random Pick Index](https://leetcode.com/problems/random-pick-index/)
+## [398. Random Pick Index](https://leetcode.com/problems/random-pick-index/)
 ### Problem
 Given an array, go through it for once to find a target value and output the index.
 If there are ties, pick each one with equal probability.
@@ -112,3 +112,28 @@ We insert the sum values into the tree, every time we query it the lower_bound o
 The complexity is O(n^2mlogm).
 
 Note: Python doesn't have a built-in binary search tree. We need to write our own.
+
+## [465. Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/)
+
+## Problem
+Given a list of transactions as a list of triplets: (a, b, c), meaning a give b an amount of c dollars.
+Now we want to settle all the debt with the minimum number of transactions.
+For example, (0, 1, 5) (1, 2, 5) can be settled with one transaction (2, 0, 5).
+We only need return one integer: the minimum number of transactions needed.
+
+## Solution
+We don't need to consider the transaction graph.
+Imagine during settling the debt, everyone who need to return money to others just put those money in a pool.
+The people who should receive money from others just take from that pool.
+After this, all debt are settled without knowing the original transaction graph.
+
+First, we calculate how much money each person owns (can be positive or negative).
+Then, we just use DFS to settle the debt.
+One person will return all his debt to another person.
+The DFS will search every choice of choosing the person.
+Then we start to search the choices of the next person.
+
+One concern is, what if the optimal solution is not for a person returning all his debt to another person, but returning his debt to multiple people?
+We can always find an equivalent case in our search space.
+For example, if the optimial solution is for a return money to b and to c.
+We can find a equivalent in our search space for a to return all the money to b, and b will return the extra amount to c. The 2 solutions both take 2 transactions to fiinsh.
