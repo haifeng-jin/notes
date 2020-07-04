@@ -68,22 +68,28 @@ for b in list_b:
   print(b.obj)
 ```
 ## Iterator
+
+### Product
+```python
+from itertools import product
+product('ABCD', 'xy') # list of tuples, Ax Ay Bx By Cx Cy Dx Dy
+```
 ### Group By
 ```python
 from itertools import groupby
-[k for k, g in groupby('AAAABBBCCDAABBB')]  # --> A B C D A B
-[list(g) for k, g in groupby('AAAABBBCCD')]  # --> AAAA BBB CC D
+[k for k, g in groupby('AAAABBBCCDAABBB')]  # --> ['A', 'B', 'C', 'D', 'A', 'B']
+[list(g) for k, g in groupby('AAAABBBCCD')]  # --> [['A','A','A','A'], ['B','B','B'], ['C','C'], ['D']]
 ```
 ### Combination
 ```python
 from itertools import combinations, combinations_with_replacement
-combinations('ABCD', 2)  # AB AC AD BC BD CD
-combinations_with_replacement('ABCD', 2)  # AA AB AC AD BB BC BD CC CD DD
+combinations('ABCD', 2)  # list of tuples AB AC AD BC BD CD
+combinations_with_replacement('ABCD', 2)  # list of tuples AA AB AC AD BB BC BD CC CD DD
 ```
 ### Permutation
 ```python
 from itertools import permutations
-permutations('ABCD', 2)  # AB AC AD BA BC BD CA CB CD DA DB DC
+permutations('ABCD', 2)  # list of tuples AB AC AD BA BC BD CA CB CD DA DB DC
 ```
 ## Strings
 ### Split Strings
