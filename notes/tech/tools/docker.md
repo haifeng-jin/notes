@@ -13,7 +13,7 @@ docker run  -p 5005:5005 -it --entrypoint _bin_bash jhfjhfj1/tamuta2:latest -c '
 
 run docker as a shell:
 ```
-docker run -it --entrypoint _bin_bash image_name
+docker run -it --entrypoint /bin/bash image_name
 ```
 
 You save the image as a tar archive, using `docker save -o`:
