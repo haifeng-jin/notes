@@ -11,6 +11,11 @@ docker run -i --entrypoint _bin_bash ta2image d-c '_resources_executable/1.sh $C
 docker run  -p 5005:5005 -it --entrypoint _bin_bash jhfjhfj1/tamuta2:latest -c 'ta2_serve $CONFIG_JSON'
 ```
 
+Create a docker image:
+```
+docker build -t autokeras:latest .
+```
+
 run docker as a shell:
 ```
 docker run -it --entrypoint /bin/bash image_name
