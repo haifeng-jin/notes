@@ -18,6 +18,9 @@ dq.pop()
 print(dq)  # [3, 1]
 dq.popleft()
 print(dq)  # [1]
+while dq:
+  a = dq.popleft()
+  ...
 ```
 ### Hash Table
 ```python
