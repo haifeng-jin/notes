@@ -112,3 +112,19 @@ a = 'aBA'
 print(a.upper())  # ABA
 print(a.lower())  # aba 
 ```
+
+## I/O
+### From File
+```python
+file = open('somefile')
+for line in file:
+  do_something()
+file.close()
+```
+### From standard IO
+```python
+import sys
+
+for line in sys.stdin:
+  do_something()
+```
