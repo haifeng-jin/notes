@@ -54,5 +54,4 @@ def test_add_early_stopping(bar, foo): # Remember they are in reversed order in 
 * It is not a good practice for the user to provide a list, whose length is required to be a specific number. The user may easily miss some of the elements and got an error.
 * The comments to a if statement should be above it. The same for the else clause.
 * To test if an exception is correctly thrown, assert 'This is broken' in str(context.exception).
-
-#tech/software engineering#
+* Do not use acronym for any API related things exposed to the users unless it is a really well-known acronym.
