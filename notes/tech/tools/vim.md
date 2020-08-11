@@ -1,11 +1,12 @@
-# Installation
+# VIM
+
+## Installation
 ```
 git clone https://github.com/vim/vim && cd vim
 ./configure --enable-python3interp 
 sudo make
 sudo make install
 ```
-# VIM Shortcuts
 
 ## Navigation
 `j` down
