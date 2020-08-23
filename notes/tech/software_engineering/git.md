@@ -75,8 +75,23 @@ We stash the uncommited changes and pull from remote and unstash them to apply.
 `git stash`
 `git stash pop`
 
+## Clean Up
+`rebase master -i`
+
+## Sync with Remote
+Force push the local changes.
+
+`git push origin branch_name --force-with-lease`
+
+Force pull.
+
+```shell
+git checkout branch_name
+git fetch --all
+git reset --hard origin/branch_name
+```
 ## Across Branches
-* How to merge two branches?
+### How to merge two branches?
 You can use git merge but not recommended.
 git rebase is more professional.
 For example, you are rebasing the master branch when you are on a feature branch.
@@ -89,31 +104,24 @@ and no commit is needed just use `git rebase --continue` to continue the rebase 
 When push to the remote branch, it needs to use 
 `git push --force-with-release origin branch_name` .
 
-* How to cherry-pick?
+### How to cherry-pick?
 
 Just find the commit in other branch you need.
 And on the branch you want to add the commit, execute `git cherry-pick <SHA>`.
 
 
-* Working on a branch with a dependence on another branch that is being reviewed
+### Working on a branch with a dependence on another branch that is being reviewed
 
-For this approach, you do not want to merge your feature_a into feature_b repeatedly.
-Rebasing has been mentioned in other answers, but only for rebasing things onto master. What you want to do in your case is:
-<br>
-Start your feature_b from feature_a, i.e.:
+feature_b is created like this
 `git checkout feature_a`
 `git checkout -b feature_b`
 
-Whenever feature_a changes while it is waiting to get merged into master, you rebase feature_b on it:
-... commit something onto feature_a ...
+update feature_b for the latest changes in feature_a
 `git checkout feature_b`
 `git rebase feature_a`
 
-Finally, as soon as feature_a has been merged into master, you simply get the new master and rebase feature_a onto it a last time:
+When feature_a has been merged into master, you simply get the new master and rebase feature_a onto it a last time:
 `git checkout master`
 `git pull origin master`
 `git checkout feature_b`
 `git rebase --onto master feature_a feature_b`
-
-This final rebase will graft all commits that are dangling from the feature_a commit (which is now irrelevant as it has been merged into master) right onto master. Your feature_b is now a simple, standard branch going right from master.
-EDIT: inspired from the comments, a little heads up: if you need to make some change which affects both features, then be sure to make it in feature_a (and then rebase as shown). Do not make it in two different commits in both branches, even if may be tempting; as feature_a is part of the history of feature_b, having the single change in two different commits will be semantically wrong and possibly lead to conflicts or "resurrections" of unwanted code, later.
