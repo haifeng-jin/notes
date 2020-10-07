@@ -43,6 +43,24 @@ Just use `git checkout -b <branch_name>` is good enough.
 * Show remote URL.
 `git remote show origin`
 
+## Tags
+
+List the tags
+```
+git tag
+```
+
+Get pull the tags
+```
+git fetch
+```
+
+Add a tag
+```
+git tag -a tag_name
+git push origin tag_name
+```
+
 ## Undo Things
 * How to undo a commit (not pushed to remote) to unstagged?
 `git reset HEAD~`
