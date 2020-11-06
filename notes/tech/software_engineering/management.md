@@ -1,4 +1,11 @@
-# Agile
+# Management
+
+## Conway's Law
+Any organization that designs a system (defined broadly) will produce a design whose structure is a copy of the organization's communication structure.
+
+— Melvin E. Conway
+
+## Agile
 Agile software development is a set of principles for software development in which requirements and solutions evolve through collaboration between self-organizing, cross-functional teams. It promotes adaptive planning, evolutionary development, early delivery, and continuous improvement, and it encourages rapid and flexible response to change. Agile itself has never defined any specific methods to achieve this, but many have grown up as a result and have been recognized as being 'Agile'.
 
 The big task is divided into sub-tasks hierarchically.
