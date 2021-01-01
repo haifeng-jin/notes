@@ -25,3 +25,4 @@ markdown_extensions:
 extra_javascript:
   - https://unpkg.com/mermaid@8.4.4/dist/mermaid.min.js
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML
+  - https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.11/paper-full.min.js
