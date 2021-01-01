@@ -1,5 +1,6 @@
 # Entropy
 
+## Overview
 Entropy is a measure of uncertainty, or the amount of information to reduce the uncertainty.
 The formal definition is as follows.
 
@@ -17,3 +18,16 @@ The minimum average length of the all the encodings is the entropy.
 
 The more outcomes a random variable has, the larger the entropy is.
 The more unbalance the probability distribution is, the smaller the entropy is.
+
+## The Logarithm
+
+You can think the $-\log \mathrm {P} (x_i)$ as a measurement for the encoding length of that specific result $X=x_i$.
+For example, if every outcome has a same probability of $\frac{1}{8}$, the encoding length with binary bits should be $-\log_2\frac{1}{8} = 3$.
+
+## An Expectation Perspective
+
+Entropy is an expectation of the encoding length of different outcomes. 
+
+$$
+\mathrm {H} (X)=\operatorname {E} [-\log(\mathrm {P} (X))]
+$$
