@@ -38,7 +38,7 @@ $$
 
 ## General Form 
 
-For $0 < p < \infty $, we have the following general form.
+For $0< p< \infty$, we have the following general form.
 
 $$
 \left\|x\right\|_ {p}=\left(|x_{1}|^{p}+|x_{2}|^{p}+\dotsb +|x_{n}|^{p}\right)^{1/p}
