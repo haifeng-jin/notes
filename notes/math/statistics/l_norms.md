@@ -117,5 +117,5 @@ drawIt(2.0);
 drawIt(3.0);
 drawIt(6.0);
 </script>
-<canvas id="myCanvas" width="300" height="300" resize></canvas>
+<canvas id="myCanvas" width="300" height="300"></canvas>
 </div>
