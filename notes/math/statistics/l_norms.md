@@ -67,7 +67,7 @@ function drawArrow(start, end, arrowSize) {
     ]);
     arrowPath.strokeColor = 'white';
 }
-    
+
 drawArrow(new Point(0, 150), new Point(300, 150));
 drawArrow(new Point(150, 300), new Point(150, 0));
 
