@@ -8,7 +8,7 @@ lines = ['nav:', '  - Home: index.md']
 ignore = [
     'notes/index.md',
     'notes/img',
-    'notes/javascript',
+    'notes/js',
 ]
 
 
