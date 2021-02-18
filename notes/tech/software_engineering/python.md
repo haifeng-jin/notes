@@ -1,5 +1,5 @@
 # Python
-## Gramma
+## Grammar
 * dictionary.pop(key[, default])
 ```py
 a = {'name': 'alice'}
@@ -20,21 +20,6 @@ if key not in my_dict:
 
 …except that the latter code performs at least two searches for key—three if it’s not found—while setdefault does it all with a single lookup.
 
-## Testing
-* pytest: [Pytest Course - YouTube](https://www.youtube.com/playlist?list=PLJsmaNFr5mNqSeuNepT3IaMrgzRMm9lQR)
-* Mock classes
-You cannot directly mock a class, e.g. `class ClassA`, if it contains a line of `super(ClassA, self).__init__()` since `super` does not allow to be called with a mock object. So you have to mock the functions instead of the entire class. For example, `mock.patch('ClassA.__init__')`.
-* Assert mocked function calls
-```py
-@mock.patch('ClassA.foo')
-@mock.patch('ClassA.bar')
-def test_add_early_stopping(bar, foo): # Remember they are in reversed order in args.
-	ClassA.some_function_which_calls_foo_inside()
-  assert foo.called	
-	foo.assert_called_with(x=1, y=2)s
-	args, kwargs = foo.call_args_list[0] # 0 means the first time that foo is called. 1 means the second time.
-	assert kwargs['x'] == 1
-```
 
 ## Python Best Practices
 * Import modules instead of specific objects. If the name of the module conflicts with the variables in the current module, just use "from .. import .. as .." to avoid it.
