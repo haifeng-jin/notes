@@ -1,5 +1,40 @@
 # Python
-## Grammar
+
+## Data Model
+
+* `collections.namedtuple` is for classes only with attributes, which is similar to `struct` in C++.
+* `__getitem__(self, position)` overrides the `[]` operator.
+* `__len__`'s return value is used as the return value for `len(...)`.
+
+```py
+import collections
+
+Card = collections.namedtuple('Card', ['rank', 'suit'])
+
+class FrenchDeck(object):
+    ranks = [str(n) for n in range(2, 11)] + list('JQKA')
+    suits = 'spades diamonds clubs hearts'.split()
+
+    def __init__(self):
+        self._cards = [Card(rank, suit) for suit in self.suits
+                                        for rank in self.ranks]
+
+    def __len__(self):
+        return len(self._cards)
+
+    def __getitem__(self, position):
+        return self._cards[position]
+```
+
+```py
+>>> deck = FrenchDeck()
+>>> len(deck)
+52
+>>> deck[0]
+Card(rank='2', suit='spades')
+```
+
+## Data Structures
 * dictionary.pop(key[, default])
 ```py
 a = {'name': 'alice'}
@@ -20,6 +55,45 @@ if key not in my_dict:
 
 …except that the latter code performs at least two searches for key—three if it’s not found—while setdefault does it all with a single lookup.
 
+## Design Patterns
+* Functions can be treat as objects in Python.
+* The strategy pattern and command pattern can be simplified. Whenever, there are multiple classes implementing the same interface to override a single function, we can simplify these classes into functions and pass them around.
+
+## Pytest
+* pytest: [Pytest Course - YouTube](https://www.youtube.com/playlist?list=PLJsmaNFr5mNqSeuNepT3IaMrgzRMm9lQR)
+* Mock classes
+You cannot directly mock a class, e.g. `class ClassA`, if it contains a line of `super(ClassA, self).__init__()` since `super` does not allow to be called with a mock object. So you have to mock the functions instead of the entire class. For example, `mock.patch('ClassA.__init__')`.
+
+* Assert mocked function calls
+
+```py
+import mock
+
+
+@mock.patch('ClassA.foo')
+@mock.patch('ClassA.bar')
+def test_add_early_stopping(bar, foo): # Remember they are in reversed order in args.
+	ClassA.some_function_which_calls_foo_inside()
+    assert foo.called
+	foo.assert_called_with(x=1, y=2)
+
+	args, kwargs = foo.call_args_list[0]  # 0 means the first time that foo is called. 1 means the second time.
+	assert kwargs['x'] == 1
+
+    foo.return_value = mock.Mock()  # Change the return value of the mock object.
+```
+
+## Version Compatibility
+
+If some modules only work with certain versions of dependencies,
+we should enclose the `import` statement in a `try` clause.
+
+```python
+try:
+    from .augment import HyperEfficientNet
+except ImportError:
+    HyperEfficientNet = None
+```
 
 ## Python Best Practices
 * Import modules instead of specific objects. If the name of the module conflicts with the variables in the current module, just use "from .. import .. as .." to avoid it.
