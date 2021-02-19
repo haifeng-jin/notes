@@ -40,12 +40,10 @@ Sequential -> Functional -> Model -> Layer -> Module
 分析之前先讲文件位置，engine，以 layers为例。
 这个继承链从高到底讲，每次增加了什么功能
 Module属于tf，可以追踪变量，有自己的name_scope。
+为啥要追踪变量?存储和计算.
 Layer很好理解，就是神经网络的层，变量集合，并使用这些变量构建局部计算图。
 有几个函数比较重要，所有层都要重载实现它们，init build call.
 这几个函数是如何被调用的？
-
-以Dense层为例进行讲解。
- add_weight。干了啥？
 
 ```py
   class SimpleDense(Layer):
@@ -62,3 +60,35 @@ Layer很好理解，就是神经网络的层，变量集合，并使用这些变
     def call(self, inputs):
         return tf.matmul(inputs, self.w) + self.b
 ```
+
+以Dense层为例进行讲解。
+ add_weight。干了啥？
+
+```py
+class Layer(module.Module, ...):
+
+  def add_weight(self, ...):
+    ...
+    variable = ...  # Create the variable.
+    backend.track_variable(variable)  # Track the variable.
+    if trainable:
+      self._trainable_weights.append(variable)
+    else:
+      self._non_trainable_weights.append(variable)
+```
+建立变量的过程稍有点复杂,但是和直接用`tf.Variable`建立的区别不大.此处省略.
+tf问题:变量建立过程.
+backend如何track?
+
+```py
+def track_variable(v):
+  """Tracks the given variable for initialization."""
+  if context.executing_eagerly():
+    return
+  graph = v.graph if hasattr(v, 'graph') else get_graph()
+  _GRAPH_VARIABLES[graph].add(v)
+```
+这里涉及到了一些tf概念,eager, graph.
+graph与variable的关系.
+tf接口:tf.executing_eagerly()
+get_graph干了啥?
