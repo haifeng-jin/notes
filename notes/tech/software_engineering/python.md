@@ -55,9 +55,103 @@ if key not in my_dict:
 
 …except that the latter code performs at least two searches for key—three if it’s not found—while setdefault does it all with a single lookup.
 
+## Decorators
+
+Decorator `deco` is implemented as a function `deco` that returns a function `inner`.
+If `target` is decorated with `@deco`, then `inner` will be executed instead of `target`, when `target` is called.
+
+Following is an easy example.
+
+```py
+>>> def deco(func):
+...     def inner():
+...         print('running inner()')
+...     return inner
+...
+>>> @deco
+... def target():
+...     print('running target()')
+...
+>>> target()
+running inner()
+>>> target
+<function deco.<locals>.inner at 0x10063b598>
+```
+
+The decorator functions, for example, the `deco` function in the example above, are run at import time instead of when calling `target`.
+
 ## Design Patterns
 * Functions can be treat as objects in Python.
 * The strategy pattern and command pattern can be simplified. Whenever, there are multiple classes implementing the same interface to override a single function, we can simplify these classes into functions and pass them around.
+
+### Rewriting Strategy Pattern
+
+The following code is to get the best promotion on the given order with function `best_promo`.
+The decorator `@promotion` will register all these promo functions at the import time to the global variable `promos`.
+
+There are 2 things optimized here.
+* The promo functions can just be functions instead of classes implementing the same interface.
+* We don't need to mannually construct the `promos` list. Otherwise, everytime we have a new type of promo function, we will have to modify the code in two places, the implementation of the promofunction and the `promos` list.
+
+```py
+promos = []  1
+
+def promotion(promo_func):  2
+    promos.append(promo_func)
+    return promo_func
+
+@promotion  3
+def fidelity(order):
+    """5% discount for customers with 1000 or more fidelity points"""
+    return order.total() * .05 if order.customer.fidelity >= 1000 else 0
+
+@promotion
+def bulk_item(order):
+    """10% discount for each LineItem with 20 or more units"""
+    discount = 0
+    for item in order.cart:
+        if item.quantity >= 20:
+            discount += item.total() * .1
+    return discount
+
+@promotion
+def large_order(order):
+    """7% discount for orders with 10 or more distinct items"""
+    distinct_items = {item.product for item in order.cart}
+    if len(distinct_items) >= 10:
+        return order.total() * .07
+    return 0
+
+def best_promo(order):  4
+    """Select best discount available
+    """
+    return max(promo(order) for promo in promos)
+```
+
+## Scopes
+The global variables are separated from local variables defined in functions.
+If you want to use an global variable in a function, you have to define it with `global variable_name`.
+Otherwise the following error would happen.
+
+```py
+>>> b = 6
+>>> def f2(a):
+...     # global b
+...     print(a)
+...     print(b)
+...     b = 9
+...
+>>> f2(3)
+3
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in f2
+UnboundLocalError: local variable 'b' referenced before assignment
+```
+
+We should uncomment the `global b` to make it correct. 
+
+### Closure
 
 ## Pytest
 * pytest: [Pytest Course - YouTube](https://www.youtube.com/playlist?list=PLJsmaNFr5mNqSeuNepT3IaMrgzRMm9lQR)
