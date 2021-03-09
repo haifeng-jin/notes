@@ -26,7 +26,8 @@
 
 **正文开始**
 
-从Sequential开始
+## 从Sequential开始
+
 ```py
 import keras
 
@@ -35,14 +36,19 @@ model.add(keras.layers.Dense(input_shape=(10,), units=10, activation='relu'))
 model.add(keras.layers.Dense(units=1))
 ```
 
+### 主要的类
 继承链
 Sequential -> Functional -> Model -> Layer -> Module
 分析之前先讲文件位置，engine，以 layers为例。
 这个继承链从高到底讲，每次增加了什么功能
 Module属于tf，可以追踪变量，有自己的name_scope。
 为啥要追踪变量?存储和计算.
+
+### Layer的工作原理
+
 Layer很好理解，就是神经网络的层，变量集合，并使用这些变量构建局部计算图。
 有几个函数比较重要，所有层都要重载实现它们，init build call.
+init容易理解。
 这几个函数是如何被调用的？
 
 ```py
@@ -62,7 +68,8 @@ Layer很好理解，就是神经网络的层，变量集合，并使用这些变
 ```
 
 以Dense层为例进行讲解。
- add_weight。干了啥？
+
+### add_weight。干了啥？
 
 ```py
 class Layer(module.Module, ...):
@@ -88,7 +95,51 @@ def track_variable(v):
   graph = v.graph if hasattr(v, 'graph') else get_graph()
   _GRAPH_VARIABLES[graph].add(v)
 ```
-这里涉及到了一些tf概念,eager, graph.
+这里涉及到了一些tf概念,
+[eager](https://www.tensorflow.org/guide/eager),
+[graph](https://www.tensorflow.org/guide/intro_to_graphs).
 graph与variable的关系.
-tf接口:tf.executing_eagerly()
-get_graph干了啥?
+tf接口:
+[tf.executing_eagerly()](https://www.tensorflow.org/api_docs/python/tf/executing_eagerly)
+get_graph干了啥? 通过tf接口,获取当前的计算图。
+`_GRAPH_VARIABLES`是啥? 是一个dictionary，用来追踪一个graph下面所有的variable。
+什么是variable？
+[tensor](https://www.tensorflow.org/guide/tensor)
+vs
+[variable](https://www.tensorflow.org/guide/variable)？
+Tensor值不可变，而Variable可变。
+类似于tuple vs list.
+
+
+### build如何被调用
+以lazy方式来执行，通过`_maybe_build()`。
+例如，当call被调用的时候，build必须先被调用。因为会用到里面的变量。
+
+```py
+def _maybe_build(self, inputs):
+  ...
+  if not self.built:
+    ...
+    input_shapes = tf_utils.get_shapes(inputs)
+    ...
+    self.build(input_shapes)
+    ...
+  ...
+```
+
+### call如何被调用
+
+这里我们可以使用layer的另一个使用方法。
+
+```py
+import tensorflow as tf
+import numpy as np
+
+layer = tf.keras.layers.Dense(input_shape=(10,), units=15)
+x = np.random.rand(20, 10)
+output = layer(x)
+print(output.shape)  # (20, 15)
+```
+
+其中`layer(x)`一句实际上是调用了`__call__()`函数，
+而`__call__()`一定是调用了`call()`才能让自定义layer也能这样用。
