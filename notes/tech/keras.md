@@ -98,6 +98,9 @@ def track_variable(v):
 这里涉及到了一些tf概念,
 [eager](https://www.tensorflow.org/guide/eager),
 [graph](https://www.tensorflow.org/guide/intro_to_graphs).
+默认都是eager。load model 是特殊情况，之后会讲。
+类似于Python和C语言。解释语言于编译。
+
 graph与variable的关系.
 tf接口:
 [tf.executing_eagerly()](https://www.tensorflow.org/api_docs/python/tf/executing_eagerly)
@@ -143,3 +146,32 @@ print(output.shape)  # (20, 15)
 
 其中`layer(x)`一句实际上是调用了`__call__()`函数，
 而`__call__()`一定是调用了`call()`才能让自定义layer也能这样用。
+有三种被调用的模式，Keras Tensor, graph, eager.
+检查当前是哪种状况。
+什么是Keras Tensor?
+区别于tf.Tensor。专门用于记录建模过程中的中间输出的相关信息，例如shape。从而让用户建模接口与实际执行，更加低耦合。
+
+graph和eager由当前的context决定，默认都是eager，如果是graph，会把call函数进行转化，转化成graph。
+伪代码如下。
+```py
+class Layer(module.Module, ...):
+
+  def __call__(self, inputs, **kwargs):
+
+    if isinstance(inputs, keras_tensor.KerasTensor):
+      inputs = convert_to_tf_tensor(inputs)
+      outputs = self.call(inputs)
+      return convert_to_keras_tensor(outputs)
+
+    if isinstance(inputs, np.ndarray):
+      inputs = tf.Tensor(inputs)
+
+    if context.executing_eagerly():
+      return self.call(inputs)
+    else:
+      call_fn = convert_to_tf_function(self.call)
+      return call_fn(inputs)
+```
+tf.function就是将function编译成graph的过程。
+
+### Model怎样组织了这些layer
