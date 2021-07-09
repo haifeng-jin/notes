@@ -46,7 +46,33 @@ model.add(keras.layers.Dense(units=1))
 
 其中，箭头表示类之间的继承关系。
 接下来我们按照从基类到子类的顺序来讲解，看看每个子类在基类的基础上增加了什么，这个链条也就清晰了。
-我们先来看最基的基类Module。[源码链接]
+
+我们先来看最基的基类Module。([源码链接](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/module/module.py#L35))
+
+它是TensorFlow中的一个很核心的类，可以看成是一个`Variable`的容器。
+`Variable`是TensorFlow用来存储张量的一个类，通常用来存储神经网络的权重。
+后文我们还会讲到。
+而这个容器的一种常见用法就是用来构建一个神经网络的层。
+我们可以使用`Module`的`name_scope`属性给属于这个容器的`Variable`一个命名空间。
+这样所有这些`Variable`都会以这个`Module`的名字作为前缀。
+
+```py
+import tensorflow as tf
+
+constant_tensor = tf.constant([10, 20, 30])
+class MyModule(tf.Module):
+  def __init__(self, *args, **kwargs):
+    super().__init__(*args, **kwargs)
+    with self.name_scope:  # 开启命名空间
+      self.variable = tf.Variable(constant_tensor, name="my_variable")  # 在空间中建立变量
+
+print(MyModule(name="my_module").variable)  # 发现变量名为"`Module`名字/`Variable`名字:计数"的形式
+```
+输出：
+```
+<tf.Variable 'my_module/my_variable:0' shape=(3,) dtype=int32, numpy=array([10, 20, 30], dtype=int32)>
+```
+
 属于tf，可以追踪变量，有自己的name_scope。
 为啥要追踪变量?存储和计算.
 
