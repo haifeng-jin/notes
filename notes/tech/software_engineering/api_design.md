@@ -8,4 +8,5 @@ For the ones not required and not in the kwargs, we should also document them ev
 * In docstrings of a class, use Args or Arguments to specify the args of init. Use Attributes to specify the attributes which are not init args but publicly accessible.
 * It is not a good practice for the user to provide a list, whose length is required to be a specific number. The user may easily miss some of the elements and got an error.
 * Do not use acronym for any API related things exposed to the users unless it is a really well-known acronym.
-* If the subclass doesn't support some kwarg, it should raise an error when user use it instead of ignore them silently.
+* If the subclass doesn't support some kwarg, it should raise an error when user use it, instead of ignore them silently.
+* When type checking boolean, should be clear whether 0 and 1 are considered valid or not.
