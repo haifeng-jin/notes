@@ -50,11 +50,11 @@ model.add(keras.layers.Dense(units=1))
 我们先来看最基的基类Module。([源码链接](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/module/module.py#L35))
 
 它是TensorFlow中的一个很核心的类，可以看成是一个`Variable`的容器。
-`Variable`是TensorFlow用来存储张量的一个类，通常用来存储神经网络的权重。
-后文我们还会讲到。
-而这个容器的一种常见用法就是用来构建一个神经网络的层。
-我们可以使用`Module`的`name_scope`属性给属于这个容器的`Variable`一个命名空间。
-这样所有这些`Variable`都会以这个`Module`的名字作为前缀。
+`tf.tf.Variable`是TensorFlow用来存储张量的一个类，通常用来存储神经网络的权重。
+关于`tf.Variable`类后文我们还会讲到。
+这个容器的一种常见用法就是用来构建一个神经网络的层。
+我们可以使用`tf.Module`的`name_scope`属性给属于这个容器的`tf.Variable`一个命名空间。
+这样所有这些`tf.Variable`都会以这个`Module`的名字作为前缀。
 
 ```py
 import tensorflow as tf
@@ -73,11 +73,12 @@ print(MyModule(name="my_module").variable)  # 发现变量名为"`Module`名字/
 <tf.Variable 'my_module/my_variable:0' shape=(3,) dtype=int32, numpy=array([10, 20, 30], dtype=int32)>
 ```
 
-属于tf，可以追踪变量，有自己的name_scope。
-为啥要追踪变量?存储和计算.
+`tf.Module`类上面还继承了`tf.Trackable`类，可以用来追踪容器里面的所有变量。
+在我们想把模型保存到硬盘的时候，方便进行存储。
 
 ### Layer的工作原理
 
+在我们讲解Layer的工作原理之前，我们先来看看所有Layer相关的类的代码都放在哪些文件里。
 分析之前先讲文件位置，engine，以 layers为例。
 Layer很好理解，就是神经网络的层，变量集合，并使用这些变量构建局部计算图。
 有几个函数比较重要，所有层都要重载实现它们，init build call.
