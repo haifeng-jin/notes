@@ -64,6 +64,13 @@ A `tf.Variable` instance is a data structure for storing a mutable tensor in Ten
 which will talk more later.
 The weight of a layer is a `tf.Variable` instance.
 
+什么是variable？
+[tensor](https://www.tensorflow.org/guide/tensor)
+vs
+[variable](https://www.tensorflow.org/guide/variable)？
+Tensor值不可变，而Variable可变。
+类似于tuple vs list.
+
 A typical usage of the `tf.Module` class is to group a series of operations on the tensors together,
 for example, a neural network layer.
 It has an attributed called `name_scope`,
@@ -91,6 +98,7 @@ Output:
 Because it is not part of the Keras codebase, we will not dive into the implementation of it.
 Another feature of the class is that it inherits the `Trackable` class, which tracks all the `tf.Variable` instances in the attributes of the subclasses of `tf.Module`.
 When saving the models, all the `tf.Variable` instances inside this container can be found and saved.
+The variables are also tracked for optimizing the computational graph.
 
 ### The file locations
 
@@ -136,11 +144,24 @@ They are `__init__`, `build`, `add_weight`, and `call`.
 Let's see how they work one by one.
 
 The `__init__` function is easy to understand.
-It is just records the arguments from the caller in the attributes.
+It just records the arguments from the caller with the attributes.
 
-### build如何被调用
-以lazy方式来执行，通过`_maybe_build()`。
-例如，当call被调用的时候，build必须先被调用。因为会用到里面的变量。
+#### `Layer.build` function
+[[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L440)]
+
+The `build` function is to create the `tf.Variable`s in the layer,
+which are the weight and bias in the example above.
+Because the `tf.Variable`s  are used by the `call` function,
+it would have to be created before the `call` function is called.
+Moreover, we don't want the variables to be created multiple times.
+The question we want to answer here is how the build function is called under the hood.
+
+A lazy mechanism is implemented for `build` with the `Layer._maybe_build()` function,
+whose core logic is shown as follows.
+The `Layer` instance would use the `self.built` attribute to record
+whether `build` has been called.
+Any code that would need the layer to be built would call this `_maybe_build` function to ensure 
+the layer is built.
 
 ```py
 def _maybe_build(self, inputs):
@@ -154,11 +175,60 @@ def _maybe_build(self, inputs):
   ...
 ```
 
-### add_weight。干了啥？
+The `tf_utils.get_shapes(inputs)` is a function in Keras to get the shapes of the input tensors.
+
+Here is an example of calling `_maybe_build` secretly.
+We create a layer.
+We call the layer with a tensor without explicity calling `build`.
+
+```py
+layer = SimpleDense(4)
+layer(tf.ones((2, 2)))
+```
+
+Output:
+
+```
+<tf.Tensor: shape=(2, 4), dtype=float32, numpy=
+array([[ 0.02684689, -0.07216483, -0.04574138,  0.03925534],
+       [ 0.02684689, -0.07216483, -0.04574138,  0.03925534]],
+      dtype=float32)>
+```
+
+The example runs successfully
+because the layer call would call the `__call__` function, which
+calls the `call` function.
+Before calling the `call` function, `__call__` would call `_maybe_build` first to ensure the `tf.Variable`s are created.
+The pseudo code is shown as follows.
 
 ```py
 class Layer(module.Module, ...):
+  def __call__(self, inputs, **kwargs):
+    ...
+    self._maybe_build(inputs)
+    ...
+    self.call(inputs)
+    ...
+```
+[[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L1030)]
 
+This lazy pattern appears many times in Keras source code.
+When ensuring something is called and don't want it to be called multiple times,
+you should use this pattern. 
+
+
+### `Layer.add_weight` function
+
+[[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L528)]
+
+We would also like to see how these `tf.Variable` been created in the `add_weight` function.
+Here is the pseudo code for the core logic of the `add_weight` function.
+
+It creates the variable and ask the backend to track the variable.
+The variable will be append to different lists depending on if it is trainable.
+
+```py
+class Layer(module.Module, ...):
   def add_weight(self, ...):
     ...
     variable = ...  # Create the variable.
@@ -168,9 +238,15 @@ class Layer(module.Module, ...):
     else:
       self._non_trainable_weights.append(variable)
 ```
-建立变量的过程稍有点复杂,但是和直接用`tf.Variable`建立的区别不大.此处省略.
-tf问题:变量建立过程.
-backend如何track?
+
+The process for creating the variable is a function call, which is not so different from using `tf.Variable(...)` to directly create the variable.
+The code is complicated.
+You can refer to the following link for more details.
+[[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L647)]
+
+We need the backend to track the variable for model saving and computation optimization.
+Now, the question is how the backend is tracking the variable.
+The code is shown as follows.
 
 ```py
 def track_variable(v):
@@ -180,23 +256,35 @@ def track_variable(v):
   graph = v.graph if hasattr(v, 'graph') else get_graph()
   _GRAPH_VARIABLES[graph].add(v)
 ```
-这里涉及到了一些tf概念,
-[eager](https://www.tensorflow.org/guide/eager),
-[graph](https://www.tensorflow.org/guide/intro_to_graphs).
-默认都是eager。load model 是特殊情况，之后会讲。
-类似于Python和C语言。解释语言于编译。
+
+[[Source](https://github.com/keras-team/keras/blob/433eaa00677c08bf01bc14f9767af365bd2a03fc/keras/backend.py#L1072)]
+
+We encountered two important concepts:
+[eager mode](https://www.tensorflow.org/guide/eager) and [graph mode](https://www.tensorflow.org/guide/intro_to_graphs).
+You can click the link for detailed introductions.
+
+Here is a short explaination.
+You can think eager execution as plain Python code execution.
+The tensors are all concrete values instead of placeholders.
+The operations are read and executed only when we run that line of code in the Python interpreter.
+
+However, in graph mode, all the tensors and operations are collected in advance to build the computational graph
+before any actual value is input for computation.
+The graph is then optimized for better execution speed.
+It is similar to a compiled language, like the C programming language,
+which you can turn on various optimization options to make the compiled executable file run faster.
+
+> **_TensorFlow API_** 
+`tf.executing_eagerly()` is to check whether TensorFlow is running in eager mode or not.
+[[Link](https://www.tensorflow.org/api_docs/python/tf/executing_eagerly)]
+
+By default, everything runs in eager mode.
+As shown in the code above,
+in eager mode, we don't need to track the variables because it would not compile the computation graph.
 
 graph与variable的关系.
-tf接口:
-[tf.executing_eagerly()](https://www.tensorflow.org/api_docs/python/tf/executing_eagerly)
 get_graph干了啥? 通过tf接口,获取当前的计算图。
 `_GRAPH_VARIABLES`是啥? 是一个dictionary，用来追踪一个graph下面所有的variable。
-什么是variable？
-[tensor](https://www.tensorflow.org/guide/tensor)
-vs
-[variable](https://www.tensorflow.org/guide/variable)？
-Tensor值不可变，而Variable可变。
-类似于tuple vs list.
 
 
 
