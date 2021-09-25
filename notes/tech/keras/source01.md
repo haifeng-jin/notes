@@ -37,7 +37,7 @@ model.add(keras.layers.Dense(units=1))
 The `Sequential` class is a high-level class,
 which has a chain of base classes.
 The inheritance chain looks like this:
-`tf.Module -> Layer -> Model -> Functional -> Sequential `
+`tf.Module -> Layer -> Model -> Functional -> Sequential`
 The class on the left of an arrow is the base class of the one on the right.
 
 To understand this chain of classes,

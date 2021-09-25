@@ -29,10 +29,10 @@ class SimpleDense(keras.layers.Layer):
 
 From this example, we can see that a `Layer` instance is a collection of tensors and computations about the tensors in its attributes and the input tensors.
 There are 4 methods worth noting in the example.
-They are `__init__`, `build`, `add_weight`, and `call`.
+They are `__init__()`, `build()`, `add_weight()`, and `call()`.
 Let's see how they work one by one.
 
-The `__init__` function is easy to understand.
+The `__init__()` function is easy to understand.
 It just records the arguments from the caller with the attributes.
 
 #### The import mechanism
@@ -41,25 +41,25 @@ The importing path of the `Layer` class is `tf.keras.layers.Layer`.
 However, the code of the class is in `/keras/engine/base_layer.py`.
 It is designed to decouple the importing path and the actual path
 to give better flexibility for the implementation.
-This import mechanism is implemented with the [`keras_export`](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/util/tf_export.py) decorator,
-which is implemented using the [`tf_export`](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/util/tf_export.py#L409) decorator.
+This import mechanism is implemented with the [`@keras_export()`](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/util/tf_export.py) decorator,
+which is implemented using the [`@tf_export()`](https://github.com/tensorflow/tensorflow/blob/v2.5.0/tensorflow/python/util/tf_export.py#L409) decorator.
 With `@keras_export('keras.layers.Layer')`, the 'Layer' class can be imported from `tf.keras.layers.Layer`.
 
-#### The `Layer.build` function
+#### The `Layer.build()` function
 [[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L440)]
 
-The `build` function is to create the `tf.Variable`s in the layer,
+The `build()` function is to create the `tf.Variable`s in the layer,
 which are the weight and bias in the example above.
-Because the `tf.Variable`s  are used by the `call` function,
-it would have to be created before the `call` function is called.
+Because the `tf.Variable`s  are used by the `call()` function,
+it would have to be created before the `call()` function is called.
 Moreover, we don't want the variables to be created multiple times.
 The question we want to answer here is how the build function is called under the hood.
 
-A lazy mechanism is implemented for `build` with the `Layer._maybe_build()` function,
+A lazy mechanism is implemented for `build()` with the `Layer._maybe_build()` function,
 whose core logic is shown as follows.
 The `Layer` instance would use the `self.built` attribute to record
-whether `build` has been called.
-Any code that would need the layer to be built would call this `_maybe_build` function to ensure 
+whether `build()` has been called.
+Any code that would need the layer to be built would call this `_maybe_build()` function to ensure 
 the layer is built.
 
 ```py
@@ -77,9 +77,9 @@ def _maybe_build(self, inputs):
 
 The `tf_utils.get_shapes(inputs)` is a function in Keras to get the shapes of the input tensors.
 
-Here is an example of calling `_maybe_build` secretly.
+Here is an example of calling `_maybe_build()` secretly.
 We create a layer.
-We call the layer with a tensor without explicity calling `build`.
+We call the layer with a tensor without explicity calling `build()`.
 
 ```py
 layer = SimpleDense(4)
@@ -96,9 +96,9 @@ array([[ 0.02684689, -0.07216483, -0.04574138,  0.03925534],
 ```
 
 The example runs successfully
-because the layer call would call the `__call__` function, which
-calls the `call` function.
-Before calling the `call` function, `__call__` would call `_maybe_build` first to ensure the `tf.Variable`s are created.
+because the layer call would call the `__call__()` function, which
+calls the `call()` function.
+Before calling the `call()` function, `__call__()` would call `_maybe_build()` first to ensure the `tf.Variable`s are created.
 The pseudo code is shown as follows.
 
 ```py
@@ -117,12 +117,12 @@ When ensuring something is called and don't want it to be called multiple times,
 you should use this pattern. 
 
 
-#### `Layer.add_weight` function
+#### The `Layer.add_weight()` function
 
 [[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L528)]
 
-We would also like to see how these `tf.Variable` been created in the `add_weight` function.
-Here is the pseudo code for the core logic of the `add_weight` function.
+We would also like to see how these `tf.Variable` been created in the `add_weight()` function.
+Here is the pseudo code for the core logic of the `add_weight()` function.
 
 It creates the variable and ask the backend to track the variable.
 The variable will be append to different lists depending on if it is trainable.
@@ -186,7 +186,7 @@ In graph mode, the code above would record the `tf.Variable` to the `_GRAPH_VARI
 which is a dictionary mapping the TensorFlow computational graphs to a list of `tf.Variable`s.
 With this dictionary, Keras can track all the `tf.Variable`s for features like clearing the value of them.
 
-#### The `Layer.call` function
+#### The `Layer.call()` function
 
 Let's see another use case of a layer.
 Instead of being part of a model,
@@ -204,12 +204,12 @@ output = layer(x)
 print(output.shape)  # (20, 15)
 ```
 
-When we call `layer(x)`, it calls the `__call__` function of the `Layer` class.
-The `__call__` function would call the `call` function,
+When we call `layer(x)`, it calls the `__call__()` function of the `Layer()` class.
+The `__call__()` function would call the `call()` function,
 which implements the forward pass of the layer.
 
 Calling the layer with a Numpy array,
-the `__call__` function will just convert it to a `tf.Tensor` and call the `call` function.
+the `__call__()` function will just convert it to a `tf.Tensor` and call the `call()` function.
 If in eager mode, the function can be directly called.
 If in graph mode, we will need to convert the function to a computational graph before calling it.
 
@@ -223,7 +223,7 @@ It is a class used when creating models using the [functional API](https://keras
 It is a symbolic tensor without actual value, but only representing the shapes and types of intermediate output tensors between the layers.
 We will introduce more about it when we introduce the `Model` class.
 
-The pseudo code for the `__call__` function is shown as follows.
+The pseudo code for the `__call__()` function is shown as follows.
 ```py
 class Layer(module.Module, ...):
 
@@ -237,6 +237,9 @@ class Layer(module.Module, ...):
     if isinstance(inputs, np.ndarray):
       inputs = tf.Tensor(inputs)
 
+    # Check the inputs are compatible with the layer.
+    input_spec.assert_input_compatibility(self.input_spec, inputs, self.name)
+
     if context.executing_eagerly():
       return self.call(inputs)
     else:
@@ -244,3 +247,58 @@ class Layer(module.Module, ...):
       return call_fn(inputs)
 ```
 [[Source](https://github.com/keras-team/keras/blob/r2.6/keras/engine/base_layer.py#L926)]
+
+
+#### Input compatibility checking
+
+Notably, in the code above, the inputs compatibility is being checked before the actual call.
+This is to ensure the bug is being catched early and throw out a meaningful error message.
+If you run the following code, you will get an error.
+It calls the `Dense` layer with vectors of length 5 first,
+which cause the layer to initialize the weights for these vectors.
+Then, it calls the same layer again with vectors of length 4,
+which are not compatible with the weights created just now.
+
+```py
+layer = layers.Dense(3)
+layer(np.random.rand(10, 5))
+layer(np.random.rand(10, 4))
+```
+
+Error message:
+
+```
+ValueError: Input 0 of layer dense is incompatible with the layer: expected axis -1 of input shape to have value 5 but received input with shape (10, 4)
+```
+
+The inputs compatibility information are recorded in `self.input_spec` of a layer,
+which is actually a function with [`@property`](https://docs.python.org/3/library/functions.html#property) decorator.
+Now, we would like to see how are the `input_spec` being recorded and used to check new inputs.
+
+The base `Layer` class doesn't record this `input_spec`.
+Each layer should record their own `self.input_spec` in `build()`.
+In `build()`, they usually need to create the weights of the layer using the `input_shape`.
+Meanwhile, they can define a `self.input_spec` for what inputs are compatible with these weights.
+For example, in `Dense.build()`, they set the `input_spec` for a fixed last dimension by creating an `InputSpec` instance [link](https://github.com/keras-team/keras/blob/v2.6.0/keras/layers/core.py#L1177).
+
+The signature of the `InputSpec` is as follows.
+There are many specifications to set, like the shape, data type, number of dimensions, upper and lower bound of dimensions.
+
+```py
+class InputSpec(object):
+  def __init__(self,
+               dtype=None,
+               shape=None,
+               ndim=None,
+               max_ndim=None,
+               min_ndim=None,
+               axes=None,
+               allow_last_axis_squeeze=False,
+               name=None):
+```
+[[Source](https://github.com/keras-team/keras/blob/v2.6.0/keras/engine/input_spec.py#L29)]
+
+In `__call__`,
+`assert_input_compatibility()` would check all the specifications of the recorded `self.input_spec` for the given inputs for compatibility.
+
+[[Source](https://github.com/keras-team/keras/blob/v2.6.0/keras/engine/input_spec.py#L154)]
