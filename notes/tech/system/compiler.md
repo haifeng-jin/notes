@@ -2,6 +2,8 @@
 
 * AST is short for abstract syntax tree.
 * IR is short for intermediate representation.
+* The compiler can optimize the code execution because assembly language have more control over the hardware.
+* LLVM is designed for static compiling instead of JIT (just in time) compiling.
 
 ## C Compiling Process
 
