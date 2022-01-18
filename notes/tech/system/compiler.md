@@ -10,6 +10,25 @@
 * If running on GPUs, the output of a deep learning compiler is PTX, something like assembly code for GPUs.
 * Deep learning compilers have both JIT and AOT kind.
 
+### How does a driver work?
+A driver is a program usually loaded by the operating system at start.  It
+creates an abstraction of the hardware it manages.  A program running on the
+CPU may call this driver through the bus, and the driver will operate the
+hardware and writeback the results.
+
+The GPU has a Nvidia driver, which contains a CUDA driver.
+They operate the GPUs.
+
+### How does a CUDA C++ code compile?
+
+It is compiled with Nvidia CUDA Compiler (NVCC) instead of gcc or g++ or clang.
+The NVCC is implemented based on LLVM.
+It would analysis the C++ code and extract out the code to run on CPU (the host code) and the code to run on GPU (the device code).
+Put them into an executable binary file, named CUDA Binary (cubin) file.
+The executable runs on the host machine, but also contains the parts to run on GPU, like the PTX.
+When runs it will call the CUDA runtime to run on GPU.
+
+
 ## Language Compiler
 
 ### C Compiling Process
