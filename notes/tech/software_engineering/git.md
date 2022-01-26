@@ -43,6 +43,9 @@ Just use `git checkout -b <branch_name>` is good enough.
 * Show remote URL.
 `git remote show origin`
 
+* Show git branch tree-structure view.
+`git status --graph`
+
 ## Tags
 
 List the tags
