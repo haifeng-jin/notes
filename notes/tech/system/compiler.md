@@ -28,6 +28,12 @@ Put them into an executable binary file, named CUDA Binary (cubin) file.
 The executable runs on the host machine, but also contains the parts to run on GPU, like the PTX.
 When runs it will call the CUDA runtime to run on GPU.
 
+### XLA
+
+XLA is the deep learning compiler for TensorFlow.
+XLA is a JIT compiler.
+It starts from High level IR.
+It outputs the LLVM IR to run on GPU.
 
 ## Language Compiler
 
