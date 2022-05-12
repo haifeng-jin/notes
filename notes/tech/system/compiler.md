@@ -7,7 +7,7 @@
 
 ## Deep Learning Compiler
 
-* If running on GPUs, the output of a deep learning compiler is PTX, something like assembly code for GPUs.
+* If running on GPUs, the output of a deep learning compiler is something like assembly code for GPUs.
 * Deep learning compilers have both JIT and AOT kind.
 
 ### How does a driver work?
@@ -27,6 +27,9 @@ It would analysis the C++ code and extract out the code to run on CPU (the host 
 Put them into an executable binary file, named CUDA Binary (cubin) file.
 The executable runs on the host machine, but also contains the parts to run on GPU, like the PTX.
 When runs it will call the CUDA runtime to run on GPU.
+
+### How does PTX work?
+"With CUDA driver APIs, compilation and loading are tied together. PTX Compiler APIs de-couple the two operations. This allows applications to perform early compilation and caching of the GPU assembly code." [Source](https://docs.nvidia.com/cuda/ptx-compiler-api/index.html)
 
 ### XLA
 
