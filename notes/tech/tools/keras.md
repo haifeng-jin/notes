@@ -32,10 +32,12 @@ class SomeTest(test_combinations.TestCase):
 ```
 
 ```py
+# The following doesn't control which TF version to use (TF1 or TF2).
+# They only decide how to run the tests based on the current enabled TF version.
+# The TF version is specified by the command for running the tests.
 # Keras style for run all modes. (Recommended)
-# It runs the test three times.
-# Once in TF 1 mode.
-# For TF 2 modes, it run with `test_utils.should_run_eagerly` equal to `True` and `False`.
+# Run once in TF 1 mode.
+# For TF 2 modes, it run twice with `test_utils.should_run_eagerly` equal to `True` and `False`.
 @test_combinations.run_all_keras_modes
 def some_test(self):
     ...
@@ -44,14 +46,15 @@ def some_test(self):
 @test_combinations.run_all_keras_modes(always_skip_v1=True)
 @test_combinations.run_all_keras_modes(always_skip_eager=True)
 
-# Only run twice in TF1 and TF2.
-# The graph mode is the TF1 legacy mode.
+# Run twice in TF1 (graph & eager).
+# Run once in TF2 (eager).
+# The graph mode is the TF1 legacy mode, which doesn't exist in TF2.
 # No args needed for the test method.
 @test_combinations.generate(test_combinations.combine(mode=['graph', 'eager']))
 def some_test(self):
     pass
 
-# Only run once in TF2.
+# Only run once in TF2 with eager mode.
 @test_utils.run_v2_only
 ```
 
