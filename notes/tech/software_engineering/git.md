@@ -146,3 +146,11 @@ When feature_a has been merged into master, you simply get the new master and re
 `git pull origin master`
 `git checkout feature_b`
 `git rebase --onto master feature_a feature_b`
+
+### Checkout a pull request branch of other's fork
+
+```bash
+$ git remote add theirusername git@github.com:theirusername/reponame.git
+$ git fetch theirusername
+$ git checkout -b mynamefortheirbranch theirusername/theirbranch
+```
