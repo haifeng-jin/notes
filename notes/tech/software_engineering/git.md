@@ -68,6 +68,9 @@ git push origin tag_name
 * How to undo a commit (not pushed to remote) to unstagged?
 `git reset HEAD~`
 
+* Unstage a single file
+`git restore --staged my_file.py`
+
 * How to revert the last several commits?
 First you can use `git reset <SHA1>` 
 and `git push origin <branch_name> -f`.
