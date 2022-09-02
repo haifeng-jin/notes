@@ -46,6 +46,10 @@ Just use `git checkout -b <branch_name>` is good enough.
 * Show git branch tree-structure view.
 `git status --graph`
 
+* Stash by hunks.
+`git stash -p`
+and use `?` to print the instructions.
+
 ## Tags
 
 List the tags
