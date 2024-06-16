@@ -21,6 +21,7 @@ print(dq)  # [1]
 while dq:
   a = dq.popleft()
   ...
+print(dq[-1])
 ```
 ### Hash Table
 ```python
@@ -111,6 +112,14 @@ print(a.count('aba'))  # 2
 a = 'aBA'
 print(a.upper())  # ABA
 print(a.lower())  # aba 
+```
+### Check single char
+
+```python
+a.isdecimal()  # True if a consists of 0-9
+a.islower()  # True if a consists of a-z
+a.isupper()  # True if a consists of A-Z
+a.isalpha()  # True if a consists of a-z,A-Z.
 ```
 
 ## I/O
