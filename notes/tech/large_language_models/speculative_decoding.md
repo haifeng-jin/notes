@@ -1,24 +1,22 @@
-# Large Language Models
+# Speculative decoding
 
-## Serving
-
-### Speculative decoding
+It is a technique to accelerate serving.
 
 [Paper link](https://arxiv.org/abs/2211.17192)
 
 
 [Blog link](https://blog.gopenai.com/understanding-speculative-decoding-for-faster-inference-in-transformers-e604de3e2ae9)
 
-#### Key idea
+## Key idea
 During inference, use the low-cost smaller models for some tokens and only use the large models for the tokens that it does not agree with the smaller one.
 
-#### Efficiency
+## Efficiency
 It is not a technique of saving resource, but a way to inference multiple tokens in paralell
 so that we can save time.
 It consumes the same amount (or slightly more) of resource and requires more available GPUs at once since we are running in parallel, not in sequence.
 The small overhead is caused by using the smaller model.
 
-#### The process
+## The process
 The smaller model generate some tokens: (x0, x1, x2, ..., xn).
 
 Put them into `n` sequences: (x0), (x0, x1), (x0, x1, x2), ..., (x0, x1, x2, ..., xn).
