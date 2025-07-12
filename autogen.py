@@ -16,6 +16,7 @@ def generate_line(path, depth):
     print(path)
     f = open(path, 'r')
     name = f.readline().rstrip()[2:]
+    name = name.replace('`', '')
     f.close()
     return '  ' * (depth + 1) + '- ' + name + ': ' + path[6:]
 
