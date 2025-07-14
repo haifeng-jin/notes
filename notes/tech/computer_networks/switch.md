@@ -1,6 +1,6 @@
 # Switch
 
-Switch is in the datalink layer of the [OSI model](../osi).
+Switch is in the datalink layer of the [OSI model](./osi.md).
 It uses the MAC address of the frame to decide where to send the frame.
 It keeps a table of MAC addresses and where to send to them.
 If the frame is sending to a MAC address not in the table,
