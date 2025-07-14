@@ -16,7 +16,13 @@ Additionally, you have all this rich data about your app that is being generated
 
 ## *It’s Time to Get Serious About Logging*
 
-Once you’re working on an application that is not running on your desktop, logging messages (including exceptions) are usually your only lifeline to _quickly_ discovering why something in your app isn’t working correctly. Sure, [APM tools](https://stackify.com/application-performance-management-tools/) can alert you to [memory leaks](/memory-leaks-java/) and performance bottlenecks, but generally lack enough detail to help you solve a specific problem, i.e. why can’t _this_ user log in, or why isn’t _this_ record processing?
+Once you’re working on an application that is not running on your desktop,
+logging messages (including exceptions) are usually your only lifeline to
+_quickly_ discovering why something in your app isn’t working correctly. Sure,
+[APM tools](https://stackify.com/application-performance-management-tools/) can
+alert you to memory leaks and performance bottlenecks,
+but generally lack enough detail to help you solve a specific problem, i.e. why
+can’t _this_ user log in, or why isn’t _this_ record processing?
 
 At Stackify, we’ve built a “culture of logging” which set out to accomplish these goals:
 
@@ -66,7 +72,10 @@ public class Foo {
 }
 ```
 
-Take the following [factory method](/static-factory-methods/), which creates a Foo. Note how I’ve opened the door for error – the method takes a Double as an input parameter. I call doubleValue() but don’t check for null. This could cause an exception.
+Take the following factory method, which creates a
+Foo. Note how I’ve opened the door for error – the method takes a Double as an
+input parameter. I call doubleValue() but don’t check for null. This could
+cause an exception.
 
 ```java
 public class FooFactory {
@@ -125,7 +134,7 @@ java.lang.NullPointerException
     at com.stackifytest.logging.FooFactoryTest.test(FooFactoryTest.java:11)
 ```
 
-Now we have some logging – we know when Foo objects are created, and when they fail to create in createFoo(). But we are missing some context that would help. The default toString() implementation doesn’t build any data about the members of the object. We have some options here, but let’s have the [IDE](/top-integrated-developer-environments-ides/) generate an implementation for us.
+Now we have some logging – we know when Foo objects are created, and when they fail to create in createFoo(). But we are missing some context that would help. The default toString() implementation doesn’t build any data about the members of the object. We have some options here, but let’s have the IDE generate an implementation for us.
 
 ```java
 @Override
@@ -212,7 +221,11 @@ What we all really need is a solution that provides:
 * Makes it available, instantly, to everyone on your team
 * Presents a timeline of logging throughout your entire stack/infrastructure
 * Is highly indexed and searchable by being in a  [structured format](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/)
-This is the part where I tell you about [Stackify Retrace](/retrace/). As we sought to improve our own abilities to quickly and efficiently work with our log data, we decided to make it a core part of our product (yes, we use Stackify to monitor Stackify) and share with our customers, since we believe it’s an issue central to application troubleshooting.
+This is the part where I tell you about Stackify Retrace. As we
+sought to improve our own abilities to quickly and efficiently work with our
+log data, we decided to make it a core part of our product (yes, we use
+Stackify to monitor Stackify) and share with our customers, since we believe
+it’s an issue central to application troubleshooting.
 
 First, we realize that lots of developers already have logging in place, and aren’t going to want to take a lot of time to rip that code out and put new code in. That’s why we’ve created logging appenders for the most common Java logging frameworks.
 
@@ -243,14 +256,14 @@ log4j.appender.STACKIFY.application=test-logging
 log4j.appender.STACKIFY.environment=test
 ```
 
-As you can see, if you’re already using a different appender, you can keep it in place and put them side-by-side. Now that you’ve got your logs streaming to Stackify we can take a look at the logging dashboard. (By the way, if our monitoring agent is installed, you can also send [Syslog](/syslog-101/) entries to Stackify as well!)
+As you can see, if you’re already using a different appender, you can keep it in place and put them side-by-side. Now that you’ve got your logs streaming to Stackify we can take a look at the logging dashboard. (By the way, if our monitoring agent is installed, you can also send Syslog entries to Stackify as well!)
 
 ![](java-logging-best-practices-8353-e1488513909777.png)
 This dashboard shows a consolidated stream of log data, coming from all your servers and apps, presented in a timeline. From here, you can quickly
 
 * View logs based on a range of time
 * Filter for specific servers, apps, or environments
-Plus there are a couple of really great usability things built in. One of the first things you’ll notice is that chart at the top. It’s a great way to quickly “triage” your application. The blue line indicates the rate of log messages, and the red bars indicate # of [exceptions being logged](/best-practices-exceptions-java/).
+Plus there are a couple of really great usability things built in. One of the first things you’ll notice is that chart at the top. It’s a great way to quickly “triage” your application. The blue line indicates the rate of log messages, and the red bars indicate # of exceptions being logged.
 
 It’s clear that a few minutes ago, my web app started having a lot more consistent activity but more importantly, we started getting more exceptions about the same time. Exceptions don’t come without overhead for your CPU and memory, and they also can have a direct impact on user satisfaction, which can cost real money.
 

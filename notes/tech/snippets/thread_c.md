@@ -55,7 +55,6 @@ pthread_t类型通常用结构来表示
 
 ![](2012040513305667.jpg)
  
-![](copycode.gif)
  
 
 ```c
@@ -80,7 +79,6 @@ int main(){
 ```
 
  
-![](copycode%202.gif)
  
 
 ![](2012040513395336.jpg)
@@ -94,7 +92,6 @@ int main(){
 ![](2012040514044318.jpg)
 
  
-![](copycode%203.gif)
  
 
 ```c
@@ -131,7 +128,6 @@ void *thrd_func(void *arg){
 ```
 
  
-![](copycode%204.gif)
  
 
 ![](2012040518580628.jpg)
@@ -157,7 +153,6 @@ void *thrd_func(void *arg){
 
 ![](2012040518593023.jpg)
  
-![](copycode%205.gif)
  
 
 ```c
@@ -210,7 +205,6 @@ void * thrd_func2(void * arg) {
 ```
 
  
-![](copycode%206.gif)
  
 
 ![](2012040520075677.jpg)
@@ -226,7 +220,6 @@ void * thrd_func2(void * arg) {
 ![](2012040519003125.jpg)
 
  
-![](copycode%207.gif)
  
 
 ```c
@@ -280,12 +273,10 @@ void * thrd_func2(void * arg) {
 ```
 
  
-![](copycode%208.gif)
  
 
 ![](2012040520271135.jpg)
  
-![](copycode%209.gif)
  
 
 ```c
@@ -341,7 +332,6 @@ void *thrd_func(void *arg){
 ```
 
  
-![](copycode%2010.gif)
  
 
 ![](2012040521572369.jpg)
