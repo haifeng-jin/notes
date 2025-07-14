@@ -16,12 +16,12 @@ TCP_IP（Transmission Control Protocol_Internet Protocol）即传输控制协议
 UDP（User Data Protocol，用户数据报协议）是与TCP相对应的协议。它是属于TCP/IP协议族中的一种。
 下面的图表明了这些协议的关系。
 
-![](/img/tech/snippets/socket_c/27111530-6d4641d32e944b98b698e167f72a263f.png)
+![](27111530-6d4641d32e944b98b698e167f72a263f.png)
 
 **2.Socket** **在哪里呢？**
 
  
-![](/img/tech/snippets/socket_c/27111710-a88a3bab25064f0480b41f22b50d6f76.png)
+![](27111710-a88a3bab25064f0480b41f22b50d6f76.png)
  
 
 3.Socket* **是什么呢？***
@@ -42,7 +42,7 @@ Socket是应用层与TCP_IP协议族通信的中间软件抽象层，它是一�
 
 下图是Socket编程的基本流程：
 
-![](/img/tech/snippets/socket_c/27113109-ad8f7a2ce6d64ae39706ef7db3aa07cd.png)
+![](27113109-ad8f7a2ce6d64ae39706ef7db3aa07cd.png)
 **5.Linux C Socket简单实例与详细注释**
  
 
@@ -185,9 +185,9 @@ int main()
 
 客户端
 
-![](/img/tech/snippets/socket_c/29163938-e5b43a8d3501467d8723b2de7392ab49.x-png.png)
+![](29163938-e5b43a8d3501467d8723b2de7392ab49.x-png.png)
 服务器端
 
-![](/img/tech/snippets/socket_c/29163855-55c0a397cda04d4a9f46ada36149af3b.x-png.png)
+![](29163855-55c0a397cda04d4a9f46ada36149af3b.x-png.png)
 
 ![](http://images.cnitblog.com/blog/466768/201312/27111710-a88a3bab25064f0480b41f22b50d6f76.png)
