@@ -11,6 +11,5 @@ the function.
 If the function is defined directly in the header, it would create an internal
 linkage. Every translation unit would get a separate copy.
 
-There is also a concept called "no linkage".  For example, a type has no
-linkage. A class or a template is a type definition. They have no linkage.  So,
-put them in the header would not violate the ODR as they do not link.
+There is also a concept called "no linkage".  For example, the local variables
+that no others can refer to.
