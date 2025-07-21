@@ -1,9 +1,9 @@
 # Header vs Source
 
-In general only [declarations](./declaration_and_definition.md) should be put into the header files (`.h` files),
+In general only [declarations](declaration_and_definition.md) should be put into the header files (`.h` files),
 the definitions should all go into source files (`.cpp` files).
 This is to obey the ODR.
-We want each [translation unit](./translation_unit.md) to be aware of everything declared but not keep a
+We want each [translation unit](translation_unit.md) to be aware of everything declared but not keep a
 separate copy of the object in memory. Then, they link to the same object.
 
 There are a few exceptions.
@@ -74,7 +74,7 @@ definition instead of just a declaration of the class name.
 For templates, the compiler needs the entire definition of the class or the
 function to generate the code for that type when instantiated.
 
-See [template](./template.md) for more details on how a template is compiled.
+See [template](template.md) for more details on how a template is compiled.
 
 ```cpp
 // MyContainer.h
@@ -119,7 +119,7 @@ public:
 
 ## `constexpr`
 
-[`constexpr`](./constexpr.md) functions are functions that can be evaluated at compile time if
+[`constexpr`](constexpr.md) functions are functions that can be evaluated at compile time if
 their arguments are known at compile time.
 
 ```cpp

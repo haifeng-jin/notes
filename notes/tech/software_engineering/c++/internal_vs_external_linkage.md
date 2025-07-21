@@ -1,7 +1,7 @@
 # Internal vs External Linkage
 
 This internal vs external linkage concept is referring to the [translation
-unit](./translation_unit.md) at compile time. It describes if an entity has its
+unit](translation_unit.md) at compile time. It describes if an entity has its
 own copy in a translation unit or link to one from another translation unit.
 
 If a function is declared in the header and implemented in the source file, it
