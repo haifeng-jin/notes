@@ -3,6 +3,8 @@
 What it does is to copy the data and nullify the source.
 We mark it as [`noexcept`](noexcept.md), so that it would not fall back to the copy
 constructor of the vector.
+The move constructor is featured by the `&&` rvalue reference.
+When use `move`, it picks the correct constructor among others.
 
 ```cpp
 class MyVectorWrapper {
