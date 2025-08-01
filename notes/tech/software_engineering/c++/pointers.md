@@ -51,3 +51,15 @@ function if you don't return it back.
 So, no `std::move` is needed. It uses `std::make_shared<MyClass>();` to create.
 
 Dereferenced pointers: referring to the value that a pointer is pointing to.
+
+## `.release()`
+
+It releases the ownership from `unique_ptr` and can give the ownership to a
+plain pointer like `int*`.
+
+```cpp
+std::unique_ptr<int> p1 = std::make_unique<int>(10);
+int* raw_ptr = p1.release();
+std::unique_ptr<int> p2(raw_ptr); // The new unique_ptr takes ownership.
+// p1 is now null. p2 owns the memory.
+```
