@@ -2,6 +2,12 @@
 
 Visit the [notes.haifengjin.com](https://notes.haifengjin.com/) to see the contents.
 
-This is still under construction.
 
-My notes will be migrated to this repo gradually.
+```sh
+# setup:
+pip install -r requirementes.txt
+python autogen.py
+
+# serve:
+mkdocs serve
+```
