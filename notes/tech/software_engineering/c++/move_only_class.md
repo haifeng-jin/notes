@@ -1,4 +1,4 @@
-# Move constructor
+# Move-only Class
 
 What it does is to copy the data and nullify the source.
 We mark it as [`noexcept`](noexcept.md), so that it would not fall back to the copy
