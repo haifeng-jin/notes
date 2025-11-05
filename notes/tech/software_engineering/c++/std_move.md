@@ -56,4 +56,6 @@ private:
 
 ```
 
+Also, the `std::move` is widely used in the implementation of [move constructors](move_constructor.md)
+
 Another important use case is to move the [`unique_ptr`](pointers.md) since they cannot be copied.
