@@ -95,6 +95,7 @@ MyClass my_object(&my_dep); // This is correct.
 The developer must explicity checking if an error is returned from the function
 before using its value.
 
+```cpp
 #include <iostream>
 #include <string>
 #include <absl/status/status.h>
@@ -198,3 +199,4 @@ int main() {
 
     return 0;
 }
+```
