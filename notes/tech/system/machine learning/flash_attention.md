@@ -6,8 +6,14 @@ The bottleneck of attention layer is the memory access speed, A.K.A. it is memor
 
 Flash attention is a kernel that fused the entire attention operation into one kernel.
 
-The memory bottleneck is to transfer the O(N^2) attention weight matrix ($QK^T$) and the 
+The memory bottleneck is to transfer the O(N^2) attention score matrix ($QK^T$) and the attention weight matrix (after softmax) between the HBM and SRAM.
 
-Flash Attention is fast because it directly addresses the memory bottleneck of the standard attention mechanism in Transformers, particularly when running on GPUs.
+The compute usually needs to wait for the memory transfer to complete, which reduced the GPU utilization.
 
-The key to its speed is a technique called I/O-Awareness, which minimizes the amount of data transferred between the GPU's fast but small SRAM (on-chip memory/cache) and the slow but large HBM (High Bandwidth Memory/global GPU memory).
+FlashAttention avoided transfer the intermediate results between SRAM and HBM completely.
+Each thread block only loads a tile of Q, K, V into SRAM, computes the attention scores for that tile, applies softmax, and then computes the output for that tile, before writeing the final output back to HBM.
+
+It schedules each row of Q in one thread block. So, that corresponding SRAM can hold the accumulated value needed for the softmax computation.
+In this way, it avoided a global sync for softmax.
+
+Recomputing of certain intermediate results is used to trade computation for memory access during backward pass.
